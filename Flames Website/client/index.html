@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="indexstyle.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="hplogo.png" alt="hplogo">
+        </div>
+        <nav>
+            <ul>
+                <a href="index.html"><li>Home</li></a>
+                <a href="result.html"><li>About Flames</li></a>
+                <a href="contact.html"><li>Contact us</li></a>
+            </ul>
+        </nav>
+    </header>
+    <div class="main">
+        <div class="text">
+            <div class="textinput1">
+                <label for="name1">Your name:</label>
+                <input type="text" id="name1">
+            </div>
+            <div class="textinput2">
+                <label for="name2">Your Partner's name:</label>
+                <input type="text" id="name2">
+            </div>
+            <button onclick="calculateFlames()">Will Be</button>
+        </div>
+        <div id="result" class="result-container">
+            <div class="result-text" id="result-text"></div>
+            <div class="result-image" id="result-image"></div>
+        </div>
+    </div>
+    <script>
+        function calculateFlames() {
+            let originalName1 = document.getElementById('name1').value;
+            let originalName2 = document.getElementById('name2').value;
+            let name1 = originalName1.toLowerCase().replace(/\s+/g, '');
+            let name2 = originalName2.toLowerCase().replace(/\s+/g, '');
+            
+            let flames = "flames";
+            
+            // Remove common letters
+            for (let i = 0; i < name1.length; i++) {
+                let char = name1[i];
+                if (name2.includes(char)) {
+                    name1 = name1.replace(char, '');
+                    name2 = name2.replace(char, '');
+                    i--; // Adjust index due to removal
+                }
+            }
+            
+            // Calculate total remaining letters
+            let totalLetters = name1.length + name2.length;
+            
+            // Determine FLAMES result
+            while (flames.length > 1) {
+                let splitIndex = (totalLetters % flames.length) - 1;
+                if (splitIndex >= 0) {
+                    flames = flames.slice(splitIndex + 1) + flames.slice(0, splitIndex);
+                } else {
+                    flames = flames.slice(0, flames.length - 1);
+                }
+            }
+            
+            let result = '';
+            let imageSrc = '';
+            switch (flames) {
+                case 'f':
+                    result = `${originalName1} and ${originalName2} will be Friends`;
+                    imageSrc = 'images/friends.gif';  // Replace with actual image path
+                    break;
+                case 'l':
+                    result = `${originalName1} and ${originalName2} will be Lovers`;
+                    imageSrc = 'images/lovers.gif';  // Replace with actual image path
+                    break;
+                case 'a':
+                    result = `${originalName1} and ${originalName2} will have Affection`;
+                    imageSrc = 'images/affection.gif';  // Replace with actual image path
+                    break;
+                case 'm':
+                    result = `${originalName1} and ${originalName2} will be Married`;
+                    imageSrc = 'images/married.gif';  // Replace with actual image path
+                    break;
+                case 'e':
+                    result = `${originalName1} and ${originalName2} will be Enemies`;
+                    imageSrc = 'images/enemies.gif';  // Replace with actual image path
+                    break;
+                case 's':
+                    result = `${originalName1} and ${originalName2} will be Siblings`;
+                    imageSrc = 'images/siblings.gif';  // Replace with actual image path
+                    break;
+            }
+
+            let resultTextElement = document.getElementById('result-text');
+            let resultImageElement = document.getElementById('result-image');
+            resultTextElement.innerHTML = `${result}`;
+
+            // Clear previous image if any
+            resultImageElement.innerHTML = '';
+
+            // Add the image element dynamically
+            let imgElement = document.createElement('img');
+            imgElement.src = imageSrc;
+            resultImageElement.appendChild(imgElement);
+
+            // Add the animation class dynamically
+            resultTextElement.classList.remove('animate');
+            resultImageElement.classList.remove('animate');
+            void resultTextElement.offsetWidth;  // Trigger reflow to restart the animation
+            void resultImageElement.offsetWidth;  // Trigger reflow to restart the animation
+            resultTextElement.classList.add('animate');
+            resultImageElement.classList.add('animate');
+        }
+    </script>
+    
+</body>
+</html>
